@@ -35,8 +35,8 @@ func TestGetPoolStatus(t *testing.T) {
 			         "symbol": "TEST1",
 			         "algorithm": "test1",
 			         "poolStats": {
-			            "validShares": "79649599",
-			            "validBlocks": "8115",
+			            "validShares": 0,
+			            "validBlocks": 0,
 			            "invalidShares": "1359059",
 			            "totalPaid": "13579727.61959752997063333"
 			         },
@@ -105,8 +105,8 @@ func TestGetPoolStatus(t *testing.T) {
 				Symbol: "TEST1",
 				Algorithm: "test1",
 				Stat: Stat{
-					ValidShares: 79649599,
-					ValidBlocks: 8115,
+					ValidShares: 0,
+					ValidBlocks: 0,
 					InvalidShares: 1359059,
 					TotalPaid: 13579727.61959752997063333,
 				},

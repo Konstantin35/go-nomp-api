@@ -18,10 +18,63 @@ type Algo struct {
 }
 
 type Stat struct {
-	ValidShares   uint32 `json:"validShares,string"`
-	ValidBlocks   uint32 `json:"validBlocks,string"`
-	InvalidShares uint32 `json:"invalidShares,string"`
-	TotalPaid     float64 `json:"totalPaid,string"`
+	ValidShares   uint32 `json:"validShares"`
+	ValidBlocks   uint32 `json:"validBlocks"`
+	InvalidShares uint32 `json:"invalidShares"`
+	TotalPaid     float64 `json:"totalPaid"`
+}
+
+func (a *Stat) UnmarshalJSON(data []byte) error {
+	type Alias Stat
+	aux := &struct {
+		ValidShares   json.Number `json:"validShares"`
+		ValidBlocks   json.Number `json:"validBlocks"`
+		InvalidShares json.Number `json:"invalidShares"`
+		TotalPaid     json.Number `json:"totalPaid"`
+		*Alias
+	}{
+		Alias: (*Alias)(a),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	if len(aux.ValidShares) == 0 {
+		a.ValidShares = 0
+	} else {
+		val, err := strconv.ParseUint(strings.Trim(string(aux.ValidShares), "\""), 10, 32)
+		if err != nil {
+			return err
+		}
+		a.ValidShares = uint32(val)
+	}
+	if len(aux.ValidBlocks) == 0 {
+		a.ValidBlocks = 0
+	} else {
+		val, err := strconv.ParseUint(strings.Trim(string(aux.ValidBlocks), "\""), 10, 32)
+		if err != nil {
+			return err
+		}
+		a.ValidBlocks = uint32(val)
+	}
+	if len(aux.InvalidShares) == 0 {
+		a.InvalidShares = 0
+	} else {
+		val, err := strconv.ParseUint(strings.Trim(string(aux.InvalidShares), "\""), 10, 32)
+		if err != nil {
+			return err
+		}
+		a.InvalidShares = uint32(val)
+	}
+	if len(aux.TotalPaid) == 0 {
+		a.TotalPaid = 0
+	} else {
+		val, err := strconv.ParseFloat(strings.Trim(string(aux.TotalPaid), "\""), 64)
+		if err != nil {
+			return err
+		}
+		a.TotalPaid = val
+	}
+	return nil
 }
 
 type Blocks struct {
