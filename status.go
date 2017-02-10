@@ -156,6 +156,7 @@ func (p *Pool) UnmarshalJSON(data []byte) error {
 	if p.Algorithm == "equihash" {
 		p.Hashrate /= 500000
 	}
+	p.fixWorkerHashrate()
 	return nil
 }
 
@@ -165,7 +166,7 @@ func (p *Pool) UnmarshalJSON(data []byte) error {
  * We can get the shareMultiplier / website.stats.hashrateWindow value from
  * divide the pool hashrate by sum of the workers shares
  */
-func (p *Pool) FixWorkerHashrate() {
+func (p *Pool) fixWorkerHashrate() {
 	var shares float64 = 0
 	for _, w := range p.Workers {
 		shares += w.Shares
@@ -182,12 +183,6 @@ type Status struct {
 	Global GlobalStat `json:"global"`
 	Algos  Algos `json:"algos"`
 	Pools  Pools `json:"pools"`
-}
-
-func (s *Status) FixWorkerHashrate() {
-	for _, p := range s.Pools {
-		p.FixWorkerHashrate()
-	}
 }
 
 func (client *NompClient) GetPoolStatus() (Status, error) {
