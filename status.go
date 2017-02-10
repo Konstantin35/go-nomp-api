@@ -105,6 +105,7 @@ func GetHashrate(hashrateStr string) float64 {
 		return 0.00
 	}
 	switch fields[1] {
+	case "KSol/s": hashrate *= 1000
 	case "KH": hashrate *= 1000
 	case "MH": hashrate *= 1000 * 1000
 	case "GH": hashrate *= 1000 * 1000 * 1000
@@ -140,6 +141,22 @@ type Pool struct {
 	Hashrate    float64 `json:"hashrate"`
 	WorkerCount uint16 `json:"workerCount"`
 	HashrateStr string `json:"hashrateString"`
+}
+
+func (p *Pool) UnmarshalJSON(data []byte) error {
+	type Alias Pool
+	aux := &struct {
+		*Alias
+	}{
+		Alias: (*Alias)(p),
+	}
+	if err := json.Unmarshal(data, &aux); err != nil {
+		return err
+	}
+	if p.Algorithm == "equihash" {
+		p.Hashrate /= 500000
+	}
+	return nil
 }
 
 /*
