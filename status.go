@@ -92,6 +92,7 @@ type Worker struct {
 type worker struct {
 	Shares        float64 `json:"shares"`
 	InvalidShares float64 `json:"invalidshares"`
+	Hashrate      float64 `json:"hashrate,omitempty"`
 	HashrateStr   string `json:"hashrateString"`
 }
 
@@ -123,7 +124,11 @@ func (w *Worker) UnmarshalJSON(data []byte) error {
 	}
 	w.Shares = worker.Shares
 	w.InvalidShares = worker.InvalidShares
-	w.Hashrate = GetHashrate(worker.HashrateStr)
+	if worker.Hashrate > 0 {
+		w.Hashrate = worker.Hashrate
+	} else {
+		w.Hashrate = GetHashrate(worker.HashrateStr)
+	}
 	return nil
 }
 

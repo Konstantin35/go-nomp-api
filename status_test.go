@@ -50,9 +50,15 @@ func TestGetPoolStatus(t *testing.T) {
 			               "shares": 0.17,
 			               "invalidshares": 0,
 			               "hashrateString": "2.43 MH"
+			            },
+			            "worker2": {
+			               "shares": 0.17,
+			               "invalidshares": 12,
+			               "hashrate": 2430000,
+			               "hashrateString": "9.87 MH"
 			            }
 			         },
-			         "hashrate": 2433814.801066667,
+			         "hashrate": 4860000,
 			         "workerCount": 1,
 			         "hashrateString": "2.43 MH"
 			      },
@@ -121,8 +127,13 @@ func TestGetPoolStatus(t *testing.T) {
 						InvalidShares: 0,
 						Hashrate: 2430000,
 					},
+					"worker2": Worker{
+						Shares: 0.17,
+						InvalidShares: 12,
+						Hashrate: 2430000,
+					},
 				},
-				Hashrate: 2433814.801066667,
+				Hashrate: 4860000,
 				WorkerCount: 1,
 				HashrateStr: "2.43 MH",
 			},
