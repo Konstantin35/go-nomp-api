@@ -18,9 +18,9 @@ type Algo struct {
 }
 
 type Stat struct {
-	ValidShares   uint32 `json:"validShares"`
+	ValidShares   uint64 `json:"validShares"`
 	ValidBlocks   uint32 `json:"validBlocks"`
-	InvalidShares uint32 `json:"invalidShares"`
+	InvalidShares uint64 `json:"invalidShares"`
 	TotalPaid     float64 `json:"totalPaid"`
 }
 
@@ -41,11 +41,11 @@ func (a *Stat) UnmarshalJSON(data []byte) error {
 	if len(aux.ValidShares) == 0 {
 		a.ValidShares = 0
 	} else {
-		val, err := strconv.ParseUint(strings.Trim(string(aux.ValidShares), "\""), 10, 32)
+		val, err := strconv.ParseUint(strings.Trim(string(aux.ValidShares), "\""), 10, 64)
 		if err != nil {
 			return err
 		}
-		a.ValidShares = uint32(val)
+		a.ValidShares = val
 	}
 	if len(aux.ValidBlocks) == 0 {
 		a.ValidBlocks = 0
@@ -59,11 +59,11 @@ func (a *Stat) UnmarshalJSON(data []byte) error {
 	if len(aux.InvalidShares) == 0 {
 		a.InvalidShares = 0
 	} else {
-		val, err := strconv.ParseUint(strings.Trim(string(aux.InvalidShares), "\""), 10, 32)
+		val, err := strconv.ParseUint(strings.Trim(string(aux.InvalidShares), "\""), 10, 64)
 		if err != nil {
 			return err
 		}
-		a.InvalidShares = uint32(val)
+		a.InvalidShares = val
 	}
 	if len(aux.TotalPaid) == 0 {
 		a.TotalPaid = 0
